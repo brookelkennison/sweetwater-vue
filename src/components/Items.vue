@@ -1,7 +1,10 @@
 <template>
-  <ul>
-    <li v-for="item in items" :key="item.id">{{ item.productName }}</li>
-  </ul>
+  <div>
+    <div v-for="item in items" :key="item.id">
+      <h4>{{ item.productName }}</h4>
+      <img :src="item.image">
+    </div>
+  </div>
 </template>
 
 <script>
