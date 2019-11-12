@@ -14,11 +14,8 @@ export default {
   name: "Items",
   data() {
     return {
-      items
+      items: items
     };
-  },
-  components: {
-    items
   }
 };
 </script>

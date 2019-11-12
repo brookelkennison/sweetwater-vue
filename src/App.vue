@@ -1,19 +1,19 @@
 <template>
   <div id="app">
     <Navigation/>
-    <Items/>
+    <ProductList/>
   </div>
 </template>
 
 <script>
 import Navigation from "./components/Navigation";
-import Items from "./components/Items";
+import ProductList from "./components/ProductList";
 
 export default {
   name: "App",
   components: {
     Navigation,
-    Items
+    ProductList
   }
 };
 </script>
