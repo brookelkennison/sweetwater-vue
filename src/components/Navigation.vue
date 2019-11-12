@@ -1,7 +1,6 @@
 <template>
-  <ul class="nav">
-    <li class="navbar-brand">Sweetwater Sound</li>
+  <div class="nav">
+    <h1 class="navbar-brand">Sweetwater Sound</h1>
     <a href="#" class="nav-link">Cart</a>
-    <!-- change ul to div later -->
-  </ul>
+  </div>
 </template>
