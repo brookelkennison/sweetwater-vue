@@ -1,69 +1,60 @@
-import shop from "/public/items.json";
+import Vue from "vue";
+import Vuex from "vuex";
+import item from "/public/items.json";
 
-const state = {
-  cartItems: []
-};
+Vue.use(Vuex);
 
-const getters = {
-  cartItems: (state, getters, rootState) => {
-    return state.items.map(({ id, quantitiy }) => {
-      const item = rootState.items.all.find(item => item.id === id);
-      return {
-        productName: item.productName,
-        price: item.price,
-        quantitiy
-      };
-    });
+export const store = new Vuex.Store({
+  state: {
+    cartItems: []
   },
-  cartTotal: (state, getters) => {
-    return getters.cartItems.reduce((total, item) => {
-      return total + item.price * item.quantitiy;
-    }, 0);
-  }
-};
-
-const actions = {
-  checkout({ commit, state }, items) {
-    const savedCartItems = [...state.cartItems];
-    commit("setCartItems", { items: [] });
-    shop.buyItems(items, () => {
-      commit("setCartItems", { items: savedCartItems });
-    });
+  getters: {
+    cartSize: state => {
+      return state.cartItems.length;
+    },
+    cartTotalItems: state => {
+      return state.cartItems.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0);
+    }
   },
-  addItemToCart({ state, commit }, item) {
-    if (item.available > 0) {
-      const cartItem = state.cartItems.find(
-        cartItems => cartItems.id === item.id
-      );
-      if (!cartItem) {
-        commit("pushItemToCart", { id: item.id });
+  mutations: {
+    addToCart: (state, itemId) => {
+      let item = state.item.find(item => item.id === itemId);
+      let cartItem = state.cartItems.find(item => item.id === itemId);
+      if (cartItem) {
+        cartItem.quantity++;
       } else {
-        commit("incrementCartItemQuantity", cartItem);
+        state.cartItems.push({
+          ...item,
+          stock: item.quantity,
+          quantity: 1
+        });
       }
-      commit("items/decrementItemInventory", { id: item.id }, { root: true });
+      item.quantity--;
+    },
+    removeFromCart: (state, itemId) => {
+      let item = state.cartItems.find(item => item.id === itemId);
+      let cartItem = state.cartItems.find(item => item.id === itemId);
+      cartItem.quantity--;
+      item.quantity++;
+    }
+  },
+  actions: {
+    fetchItems: ({ commit }) => {
+      item.getItems().then(items => {
+        commit("SetUpItems", items);
+      });
+    },
+    addToCart: ({ commit }, itemId) => {
+      item.items("add", itemId).then(itemId => {
+        commit("addToCart", itemId);
+      });
+    },
+    removeFromCart: ({ commit }, itemId) => {
+      item.items("remove", itemId).then(itemId => {
+        commit("removeFromCart", itemId);
+      });
     }
   }
-};
-
-const mutations = {
-  pushItemToCart(state, { id }, item) {
-    state.cartItems.push({
-      id,
-      quantitiy: item.quantitiy
-    });
-  },
-  incrementCartItemQuantity(state, { id }) {
-    const cartItem = state.cartItems.find(cartItems => cartItems.id === id);
-    cartItem.quantitiy++;
-  },
-  setCartItems(state, { cartItems }) {
-    state.cartItems = cartItems;
-  }
-};
-
-export default {
-  state,
-  getters,
-  actions,
-  mutations
-};
+});

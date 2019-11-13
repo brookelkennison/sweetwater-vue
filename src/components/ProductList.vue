@@ -13,7 +13,7 @@
       <p>Quantity: {{ item.quantity }}</p>
       <p>Available: {{ item.available }}</p>
       <p>Price: ${{ item.price }}</p>
-      <button :disabled="!item.available" @click="addItemToCart(item)">Add to Cart</button>
+      <button @click="addItemToCart(item)">Add to cart</button>
     </div>
   </div>
 </template>
@@ -27,9 +27,6 @@ export default {
     items: state => state.items.all
   }),
   methods: mapActions("cart", ["addItemToCart"]),
-  created() {
-    this.$store.dispatch("items/getAllItems");
-  },
   data() {
     return {
       items: items
