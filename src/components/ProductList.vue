@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Product List</h1>
     <div v-for="item in items" :key="item.id" style="margin: 30px; border: 2px solid black;">
       <p>Manufacturer: {{ item.manufacturer }}</p>
       <h1>
