@@ -13,16 +13,23 @@
       <p>Quantity: {{ item.quantity }}</p>
       <p>Available: {{ item.available }}</p>
       <p>Price: ${{ item.price }}</p>
-      <button>Add to Cart</button>
+      <button :disabled="!item.available" @click="addItemToCart(item)">Add to Cart</button>
     </div>
   </div>
 </template>
 
 <script>
 import items from "/public/items.json";
+import { mapState, mapActions } from "vuex";
 
 export default {
-  name: "Items",
+  computed: mapState({
+    items: state => state.items.all
+  }),
+  methods: mapActions("cart", ["addItemToCart"]),
+  created() {
+    this.$store.dispatch("items/getAllItems");
+  },
   data() {
     return {
       items: items
