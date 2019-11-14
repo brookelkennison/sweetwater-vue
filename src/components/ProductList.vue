@@ -13,20 +13,20 @@
       <p>Quantity: {{ item.quantity }}</p>
       <p>Available: {{ item.available }}</p>
       <p>Price: ${{ item.price }}</p>
-      <button @click="addItemToCart(item)">Add to cart</button>
+      <button @click="addToCart(item.id)">Add to cart</button>
     </div>
   </div>
 </template>
 
 <script>
 import items from "/public/items.json";
-import { mapState, mapActions } from "vuex";
 
 export default {
-  computed: mapState({
-    items: state => state.items.all
-  }),
-  methods: mapActions("cart", ["addItemToCart"]),
+  methods: {
+    addToCart(id) {
+      this.$item.dispatch("addToCart", id);
+    }
+  },
   data() {
     return {
       items: items
