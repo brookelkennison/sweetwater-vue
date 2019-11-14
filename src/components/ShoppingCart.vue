@@ -20,11 +20,13 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-// import cartItems from "../store/modules/cart.js";
+import cartItems from "../store/modules/cart.js";
 
 export default {
   data() {
-    return {};
+    return {
+      cartItems: cartItems
+    };
   },
   computed: {
     ...mapState(["cartItems"]),
@@ -32,10 +34,10 @@ export default {
   },
   methods: {
     addToCart(id) {
-      this.$item.dispatch("addToCart", id);
+      this.$store.dispatch("addToCart", id);
     },
     removeFromCart(id) {
-      this.$item.dispatch("removeFromCart", id);
+      this.$store.dispatch("removeFromCart", id);
     }
   }
 };
